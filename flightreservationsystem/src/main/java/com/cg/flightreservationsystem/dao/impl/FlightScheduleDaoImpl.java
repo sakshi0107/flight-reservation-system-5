@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cg.flightreservationsystem.bean.FlightScheduleBean;
 import com.cg.flightreservationsystem.dao.FlightScheduleDao;
 import com.cg.flightreservationsystem.excetion.FRSException;
-import com.cg.flightreservationsystem.utility.Exceptions;
 
 @Repository
 @Transactional
@@ -18,36 +17,38 @@ public class FlightScheduleDaoImpl implements FlightScheduleDao {
 
 	/**
 	 * adds schedule details to the flight table
+	 * 
 	 * @param flightScheduleBean
 	 * @return String
 	 * @throws FRSException
 	 */
-	public String addSchedule(FlightScheduleBean flightScheduleBean) throws FRSException {
-		if(flightScheduleBean!=null) {
-		entityManager.persist(flightScheduleBean);
+	public FlightScheduleBean addSchedule(FlightScheduleBean flightScheduleBean) throws FRSException {
+		if (flightScheduleBean != null) {
+			entityManager.persist(flightScheduleBean);
+		} else {
+			flightScheduleBean = null;
 		}
-		else {
-			throw new FRSException(Exceptions.CONNECTION_EXCEPTION);
-		}
-		return "added succcessfully";
+		return flightScheduleBean;
 	}
 
 	/**
 	 * delete schedule details to the flight table
+	 * 
 	 * @param flightScheduleBean
 	 * @return boolean
 	 * @throws FRSException
 	 */
-	public boolean deleteSchedule(FlightScheduleBean flightScheduleBean) throws FRSException {
-		if(flightScheduleBean!=null) {
-		FlightScheduleBean flightScheduleBean2 = entityManager.find(FlightScheduleBean.class,
-				flightScheduleBean.getScheduleId());
-		entityManager.remove(flightScheduleBean2);
-		}
-		else {
-			throw new FRSException(Exceptions.ID_INVALID);
-		}
-		return true;
+	public FlightScheduleBean deleteSchedule(FlightScheduleBean flightScheduleBean) throws FRSException {
+		FlightScheduleBean result;
+		result = entityManager.find(FlightScheduleBean.class, flightScheduleBean.getScheduleId());
+		entityManager.remove(result);
+//		if (result!=null) {
+//			  throw new FRSException(Exceptions.FOREIGN_KEY_CONSTRAINT);
+//			 
+//		} else {
+//			result = null;
+//		}
+		return result;
 	}
 
 }

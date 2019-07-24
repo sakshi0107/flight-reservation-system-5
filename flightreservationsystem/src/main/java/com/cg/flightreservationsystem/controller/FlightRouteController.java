@@ -1,12 +1,14 @@
 package com.cg.flightreservationsystem.controller;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,26 +32,29 @@ public class FlightRouteController {
 	/*
 	 * method to add route details
 	 */
-	
-	@PostMapping(value = "/addRoute", consumes = "application/json", produces = "application/json")
-	public String add(@RequestBody FlightRouteBean flightRouteBean) throws FRSException {
-		log.info("adding");
-		flightRouteBean.setCurrentTime(LocalDateTime.now());
-		String result = null;
-		if(flightRouteBean.getSource().contentEquals(flightRouteBean.getDestination())) {
-			throw new FRSException(Exceptions.CITY_EQUALS);
-		}
-		else {
-		try {
-			result = flightRouteOperationService.add(flightRouteBean);
-		} catch (FRSException e) {
-			throw new FRSException(Exceptions.CITY_INCORRECT);
-			
-		}
-		}
-		log.info("adding done");
-		return result;
 
+	@PostMapping(value = "/addRoute", consumes = "application/json", produces = "application/json")
+	public FlightRouteBean add(@Valid @RequestBody FlightRouteBean flightRouteBean) {
+		log.info("adding");
+		if (flightRouteBean.getSource() == null || flightRouteBean.getDestination() == null) {
+			throw new FRSException(Exceptions.EMPTY_LIST);
+		} else {
+
+			FlightRouteBean result = null;
+			if (flightRouteBean.getSource().equalsIgnoreCase(flightRouteBean.getDestination())) {
+				throw new FRSException(Exceptions.CITY_EQUALS);
+			} else {
+				try {
+					result = flightRouteOperationService.add(flightRouteBean);
+					System.out.println("added ");
+				} catch (FRSException e) {
+					throw new FRSException(Exceptions.CONNECTION_EXCEPTION);
+				}
+			}
+
+			log.info("adding done");
+			return result;
+		}
 	}
 
 	/*
@@ -57,37 +62,39 @@ public class FlightRouteController {
 	 */
 
 	@DeleteMapping(value = "/deleteRoute", consumes = "application/json", produces = "application/json")
-	public boolean delete(@RequestBody FlightRouteBean flightRouteBean) {
-		boolean result = false;
-		if(flightRouteBean==null) {
+	public FlightRouteBean delete(@RequestBody FlightRouteBean flightRouteBean) {
+		log.info("deleting");
+		FlightRouteBean result = null;
+		if (flightRouteBean.getRouteId() <= 0) {
 			throw new FRSException(Exceptions.EMPTY_LIST);
+		} else {
+			try {
+				result = flightRouteOperationService.delete(flightRouteBean);
+			} catch (FRSException exception) {
+				throw new FRSException(Exceptions.FOREIGN_KEY_CONSTRAINT);
+			}
 		}
-		else {
-		try {
-			result = flightRouteOperationService.delete(flightRouteBean);
-		} catch (FRSException exception) {
-			throw new FRSException(Exceptions.CONNECTION_EXCEPTION);
-		}
-		}
+		log.info("deleting done ");
 		return result;
 	}
-	
-	@PutMapping(value = "/viewRoute", consumes = "application/json", produces = "application/json")
-	public boolean view(@RequestBody FlightRouteBean flightRouteBean) {
-		boolean result = false;
-		if(flightRouteBean==null) {
+
+	@PostMapping(value = "/viewRoute", consumes = "application/json", produces = "application/json")
+	public List<FlightRouteBean> view(@RequestBody FlightRouteBean flightRouteBean) {
+		List<FlightRouteBean> route = new ArrayList<FlightRouteBean>();
+		log.info("fetching all details");
+		if (flightRouteBean == null) {
 			throw new FRSException(Exceptions.EMPTY_LIST);
+		} else {
+			try {
+				route = flightRouteOperationService.view(flightRouteBean);
+			} catch (FRSException exception) {
+				throw new FRSException(Exceptions.ID_INVALID);
+			}
 		}
-		else {
-		try {
-			result = flightRouteOperationService.view(flightRouteBean);
-		} catch (FRSException exception) {
-			throw new FRSException(Exceptions.CONNECTION_EXCEPTION);
-		}
-		}
-		return result;
+		log.info("list is displayed");
+		return route;
 	}
-	
+
 	public void setFlightRouteOperationService(FlightRouteOperationService flightRouteOperationService) {
 		this.flightRouteOperationService = flightRouteOperationService;
 	}

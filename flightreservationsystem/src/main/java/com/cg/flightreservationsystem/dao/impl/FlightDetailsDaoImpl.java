@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cg.flightreservationsystem.bean.FlightDetailsBean;
 import com.cg.flightreservationsystem.dao.FlightDetailsDao;
 import com.cg.flightreservationsystem.excetion.FRSException;
-import com.cg.flightreservationsystem.utility.Exceptions;
 
 @Repository
 @Transactional
@@ -17,38 +16,36 @@ public class FlightDetailsDaoImpl implements FlightDetailsDao {
 
 	/**
 	 * adds plane details
+	 * 
 	 * @param flightDetailsBean
 	 * @return String
-	 * @throws FRSException 
+	 * @throws FRSException
 	 */
-	public String addFlight(FlightDetailsBean flightDetailsBean) throws FRSException 
-	{	
-		if(flightDetailsBean!=null) 
-	{
-		entityManager.persist(flightDetailsBean);
-	}
-		else {
-			throw new FRSException(Exceptions.CONNECTION_EXCEPTION);
+	public FlightDetailsBean addFlight(FlightDetailsBean flightDetailsBean) throws FRSException {
+		if (flightDetailsBean != null) {
+			entityManager.persist(flightDetailsBean);
+		} else {
+			flightDetailsBean = null;
 		}
-		return "added successfully";
+		return flightDetailsBean;
 	}
 
 	/**
 	 * delete plane details
+	 * 
 	 * @param flightDetailsBean
 	 * @return boolean
 	 * @throws FRSException
 	 */
-	public boolean deleteFlight(FlightDetailsBean flightDetailsBean) throws FRSException {
-		if(flightDetailsBean!=null) {
-		FlightDetailsBean flightDetailsBean2 = entityManager.find(FlightDetailsBean.class,
-				flightDetailsBean.getFlightId());
-		entityManager.remove(flightDetailsBean2);
+	public FlightDetailsBean deleteFlight(FlightDetailsBean flightDetailsBean) throws FRSException {
+		FlightDetailsBean flightDetailsBean2;
+		flightDetailsBean2 = entityManager.find(FlightDetailsBean.class, flightDetailsBean.getFlightId());
+		if (flightDetailsBean2 != null) {
+			entityManager.remove(flightDetailsBean2);
+		} else {
+			flightDetailsBean2 = null;
 		}
-		else {
-			throw new FRSException(Exceptions.ID_INVALID);
-		}
-		return true;
+		return flightDetailsBean;
 	}
 
 }

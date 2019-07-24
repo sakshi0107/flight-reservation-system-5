@@ -7,31 +7,31 @@ import com.cg.flightreservationsystem.bean.FlightDetailsBean;
 import com.cg.flightreservationsystem.dao.FlightDetailsDao;
 import com.cg.flightreservationsystem.excetion.FRSException;
 import com.cg.flightreservationsystem.service.FlightDetailsOperationService;
+
 @Service
-public class FlightDetailsOperationServiceImpl implements FlightDetailsOperationService{
+public class FlightDetailsOperationServiceImpl implements FlightDetailsOperationService {
 
 	@Autowired
 	private FlightDetailsDao flightDetailsDao;
-	
+
 	public void setFlightDetailsDao(FlightDetailsDao flightDetailsDao) {
 		this.flightDetailsDao = flightDetailsDao;
 	}
-	
+
 	/**
 	 * method to add flight details
 	 */
-	public String add(FlightDetailsBean flightDetailsBean) throws FRSException {
-		
+	public FlightDetailsBean add(FlightDetailsBean flightDetailsBean) throws FRSException {
+
 		return flightDetailsDao.addFlight(flightDetailsBean);
 	}
 
 	/**
 	 * method to delete flight details
 	 */
-	public boolean delete(FlightDetailsBean flightDetailsBean) throws FRSException {
-		
+	public FlightDetailsBean delete(FlightDetailsBean flightDetailsBean) throws FRSException {
+
 		return flightDetailsDao.deleteFlight(flightDetailsBean);
 	}
-	
 
 }

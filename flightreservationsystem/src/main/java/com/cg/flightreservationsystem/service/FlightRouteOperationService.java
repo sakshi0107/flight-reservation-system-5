@@ -1,6 +1,7 @@
 package com.cg.flightreservationsystem.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.cg.flightreservationsystem.bean.FlightRouteBean;
 import com.cg.flightreservationsystem.excetion.FRSException;
@@ -15,7 +16,7 @@ public interface FlightRouteOperationService {
 	 * @throws SQLException
 	 */
 
-	public String add(FlightRouteBean flightRouteBean) throws FRSException;
+	public FlightRouteBean add(FlightRouteBean flightRouteBean) throws FRSException;
 
 	/**
 	 * method declaration to delete the route details
@@ -24,7 +25,7 @@ public interface FlightRouteOperationService {
 	 * @return FlightDTO
 	 * @throws FRSException
 	 */
-	public boolean delete(FlightRouteBean flightRouteBean) throws FRSException;
+	public FlightRouteBean delete(FlightRouteBean flightRouteBean) throws FRSException;
 
-	public boolean view(FlightRouteBean flightRouteBean)throws FRSException;
+	public List<FlightRouteBean> view(FlightRouteBean flightRouteBean) throws FRSException;
 }

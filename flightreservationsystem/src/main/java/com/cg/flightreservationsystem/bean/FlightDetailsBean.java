@@ -5,43 +5,42 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "flight")
 public class FlightDetailsBean {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqFlight")
-	@SequenceGenerator(name = "mySeqFlight", sequenceName = "mySeqFlight")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+
 	@Column(name = "flight_id")
 	private int flightId;
 	private int capacity;
-	@Column(name = "schedule_id")
-	private int scheduleId;
-	@Column(name = "route_id")
-	private int routeId;
 
-	public int getScheduleId() {
-		return scheduleId;
+	@OneToOne
+	@JoinColumn(name = "schedule_id", referencedColumnName = "schedule_id")
+	private FlightScheduleBean flightScheduleBean;
+
+	@OneToOne
+	@JoinColumn(name = "route_id", referencedColumnName = "route_id")
+	private FlightRouteBean flightRouteBean;
+
+	public FlightScheduleBean getFlightScheduleBean() {
+		return flightScheduleBean;
 	}
 
-	@Override
-	public String toString() {
-		return "FlightDetailsBean [flightId=" + flightId + ", capacity=" + capacity + ", scheduleId=" + scheduleId
-				+ ", routeId=" + routeId + "]";
+	public void setFlightScheduleBean(FlightScheduleBean flightScheduleBean) {
+		this.flightScheduleBean = flightScheduleBean;
 	}
 
-	public void setScheduleId(int scheduleId) {
-		this.scheduleId = scheduleId;
+	public FlightRouteBean getFlightRouteBean() {
+		return flightRouteBean;
 	}
 
-	public int getRouteId() {
-		return routeId;
-	}
-
-	public void setRouteId(int routeId) {
-		this.routeId = routeId;
+	public void setFlightRouteBean(FlightRouteBean flightRouteBean) {
+		this.flightRouteBean = flightRouteBean;
 	}
 
 	public int getFlightId() {
@@ -62,6 +61,12 @@ public class FlightDetailsBean {
 
 	public FlightDetailsBean() {
 		super();
+	}
+
+	@Override
+	public String toString() {
+		return "FlightDetailsBean [flightId=" + flightId + ", capacity=" + capacity + ", flightScheduleBean="
+				+ flightScheduleBean + ", flightRouteBean=" + flightRouteBean + "]";
 	}
 
 }

@@ -1,80 +1,91 @@
 package com.cg.flightreservationsystem.bean;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
-import oracle.sql.TIMESTAMP;
+import com.cg.flightreservationsystem.utility.Exceptions;
 
 @Entity
 @Table(name = "route")
 public class FlightRouteBean {
 
 	@Id
-
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	//@SequenceGenerator(name = "mySeq", sequenceName = "mySeq", allocationSize = 1)
 
-	@Column(name = "route_id", updatable = false, nullable = false)
+	@Column(name = "route_id")
 	private int routeId;
-	
-	@NotBlank(message = "source is mandatory")
+
+	@Pattern(regexp = "[A-Z]{1}[a-z]*", message = Exceptions.CITY_INCORRECT)
 	@Column(name = "source")
 	private String source;
 
-	
+	@Pattern(regexp = "[A-Z]{1}[a-z]*", message = Exceptions.CITY_INCORRECT)
 	@Column(name = "destination")
 	private String destination;
+
 	@Column(name = "current_time")
-	private LocalDateTime currentTime;
+
+	private LocalDate currentDate;
+
+	@OneToOne(mappedBy = "flightRouteBean")
+	private FlightDetailsBean flightDetailsBean;
+
 	public int getRouteId() {
 		return routeId;
 	}
+
 	public void setRouteId(int routeId) {
 		this.routeId = routeId;
 	}
+
 	public String getSource() {
 		return source;
 	}
+
 	public void setSource(String source) {
 		this.source = source;
 	}
+
 	public String getDestination() {
 		return destination;
 	}
+
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
-	public LocalDateTime getCurrentTime() {
-		return currentTime;
+
+	public LocalDate getCurrentDate() {
+		return currentDate;
 	}
-	public void setCurrentTime(LocalDateTime currentTime) {
-		this.currentTime = currentTime;
+
+	public LocalDate setCurrentDate(LocalDate currentDate) {
+		return this.currentDate = currentDate;
 	}
+
 	@Override
 	public String toString() {
 		return "FlightRouteBean [routeId=" + routeId + ", source=" + source + ", destination=" + destination
-				+ ", currentTime=" + currentTime + "]";
+				+ ", currentDate=" + currentDate + "]";
 	}
-	public FlightRouteBean(int routeId, @NotBlank(message = "source is mandatory") String source, String destination,
-			LocalDateTime currentTime) {
+
+	public FlightRouteBean(int routeId, String source, String destination, LocalDate currentDate) {
 		this.routeId = routeId;
 		this.source = source;
 		this.destination = destination;
-		this.currentTime = currentTime;
+		this.currentDate = currentDate;
 	}
+
 	public FlightRouteBean() {
 		super();
-		
+
 	}
-	
-	
+
 }
-	

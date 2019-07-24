@@ -1,13 +1,12 @@
 package com.cg.flightreservationsystem.bean;
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -16,19 +15,32 @@ public class FlightScheduleBean {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	//@SequenceGenerator(name = "mySeqSchedule", sequenceName = "mySeqSchedule")
+
 	@Column(name = "schedule_id")
 	private int scheduleId;
 
+	// @FutureOrPresent(message = Exceptions.DATE_NOT_EXIST)
 	@Column(name = "arrival_date")
 	private Date arrivalDate;
+
+	// @FutureOrPresent(message = Exceptions.DATE_NOT_EXIST)
 	@Column(name = "departure_date")
 	private Date departureDate;
+
+	// @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]", message =
+	// Exceptions.INVALID_TIME)
 	@Column(name = "arrival_time")
 	private String arrivalTime;
+
+	// @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]", message =
+	// Exceptions.INVALID_TIME)
 	@Column(name = "departure_time")
 	private String departureTime;
+
 	private double price;
+
+	@OneToOne(mappedBy = "flightScheduleBean")
+	private FlightDetailsBean flightDetailsBean;
 
 	public int getScheduleId() {
 		return scheduleId;

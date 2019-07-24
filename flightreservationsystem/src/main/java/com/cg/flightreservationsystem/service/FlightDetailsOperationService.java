@@ -11,7 +11,7 @@ public interface FlightDetailsOperationService {
 	 * @return FlightDTO
 	 * @throws FRSException
 	 */
-	public String add(FlightDetailsBean flightDetailsBean) throws FRSException;
+	public FlightDetailsBean add(FlightDetailsBean flightDetailsBean) throws FRSException;
 
 	/**
 	 * deletes the airplane details to the database
@@ -21,6 +21,6 @@ public interface FlightDetailsOperationService {
 	 * @throws FRSException
 	 * 
 	 */
-	public boolean delete(FlightDetailsBean flightDetailsBean) throws FRSException;
+	public FlightDetailsBean delete(FlightDetailsBean flightDetailsBean) throws FRSException;
 
 }

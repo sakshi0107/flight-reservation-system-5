@@ -1,13 +1,17 @@
 package com.cg.flightreservationsystem.dao.impl;
 
+import java.time.LocalDate;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.cg.flightreservationsystem.bean.FlightRouteBean;
 import com.cg.flightreservationsystem.dao.FlightRouteDao;
 import com.cg.flightreservationsystem.excetion.FRSException;
-import com.cg.flightreservationsystem.utility.Exceptions;
+
+import com.cg.flightreservationsystem.utility.Queries;
 
 @Repository
 @Transactional
@@ -23,16 +27,16 @@ public class FlightRouteDaoImpl implements FlightRouteDao {
 	 * @return String
 	 * @throws FRSException
 	 */
-	public String addRoute(FlightRouteBean flightRouteBean) throws FRSException {
-		// System.out.println(flightRouteBean);
+	public FlightRouteBean addRoute(FlightRouteBean flightRouteBean) throws FRSException {
+
 		if (flightRouteBean != null) {
-			 System.out.println("inside dao ");
+			LocalDate time = flightRouteBean.setCurrentDate(LocalDate.now());
+			// System.out.println(time);
 			entityManager.persist(flightRouteBean);
 		} else {
-			throw new FRSException(Exceptions.CONNECTION_EXCEPTION);
+			flightRouteBean = null;
 		}
-		System.out.println(flightRouteBean);
-		return "added successfully";
+		return flightRouteBean;
 	}
 
 	/**
@@ -42,19 +46,22 @@ public class FlightRouteDaoImpl implements FlightRouteDao {
 	 * @return boolean
 	 * @throws FRSException
 	 */
-	public boolean deleteRoute(FlightRouteBean flightRouteBean) throws FRSException {
-		if (flightRouteBean != null) {
-			FlightRouteBean flightRouteBean2 = entityManager.find(FlightRouteBean.class, flightRouteBean.getRouteId());
-			entityManager.remove(flightRouteBean2);
-		} else {
-			throw new FRSException(Exceptions.ID_INVALID);
-		}
-		return true;
+	public FlightRouteBean deleteRoute(FlightRouteBean flightRouteBean) throws FRSException {
+		FlightRouteBean result;
+		result = entityManager.find(FlightRouteBean.class, flightRouteBean.getRouteId());
+		entityManager.remove(result);
+		System.out.println(result);
+//		if (result==null) {
+//			  throw new FRSException(Exceptions.FOREIGN_KEY_CONSTRAINT);
+
+		return result;
 	}
-	
-	public boolean viewRoute(FlightRouteBean flightRouteBean)throws FRSException{
-		String query = "select route_id, source, destination from route where current_time=?";
-		entityManager.
-		return true;
+
+	public List<FlightRouteBean> viewRoute(FlightRouteBean flightRouteBean) throws FRSException {
+		String query = Queries.FIND;
+		TypedQuery<FlightRouteBean> route = entityManager.createQuery(query, FlightRouteBean.class);
+		route.setParameter("currentDate", flightRouteBean.getCurrentDate());
+		List<FlightRouteBean> route1 = route.getResultList();
+		return route1;
 	}
 }

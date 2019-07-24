@@ -6,18 +6,20 @@ import com.cg.flightreservationsystem.excetion.FRSException;
 public interface FlightDetailsDao {
 	/**
 	 * adds plane details
+	 * 
 	 * @param flightDetailsBean
 	 * @return String
 	 * @throws FRSException
 	 */
-	public String addFlight(FlightDetailsBean flightDetailsBean) throws FRSException;
+	public FlightDetailsBean addFlight(FlightDetailsBean flightDetailsBean) throws FRSException;
 
 	/**
 	 * delete plane details
+	 * 
 	 * @param flightDetailsBean
 	 * @return boolean
 	 * @throws FRSException
 	 */
-	public boolean deleteFlight(FlightDetailsBean flightDetailsBean) throws FRSException;
+	public FlightDetailsBean deleteFlight(FlightDetailsBean flightDetailsBean) throws FRSException;
 
 }

@@ -7,6 +7,7 @@ import com.cg.flightreservationsystem.bean.FlightScheduleBean;
 import com.cg.flightreservationsystem.dao.FlightScheduleDao;
 import com.cg.flightreservationsystem.excetion.FRSException;
 import com.cg.flightreservationsystem.service.FlightScheduleOperationService;
+
 @Service
 public class FlightScheduleOperationServiceImpl implements FlightScheduleOperationService {
 	@Autowired
@@ -14,28 +15,27 @@ public class FlightScheduleOperationServiceImpl implements FlightScheduleOperati
 
 	/**
 	 * method to add schedule details
+	 * 
 	 * @param flightScheduleBean
 	 * @return String
 	 * @throws FRSException
 	 */
-	public String add(FlightScheduleBean flightScheduleBean) throws FRSException {
-		
+	public FlightScheduleBean add(FlightScheduleBean flightScheduleBean) throws FRSException {
+
 		return flightScheduleDao.addSchedule(flightScheduleBean);
 	}
 
 	/**
 	 * method to delete plane details
+	 * 
 	 * @param flightScheduleBean
 	 * @return boolean
 	 * @throws FRSException
 	 */
 
-	public boolean delete(FlightScheduleBean flightScheduleBean) throws FRSException {
-	
+	public FlightScheduleBean delete(FlightScheduleBean flightScheduleBean) throws FRSException {
+
 		return flightScheduleDao.deleteSchedule(flightScheduleBean);
 	}
-	
-	
-	
-	
+
 }
